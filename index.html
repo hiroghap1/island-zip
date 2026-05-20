@@ -9,11 +9,14 @@
 <meta name="author" content="Yoshihiro Hasegawa">
 <meta name="robots" content="index, follow">
 
+<link rel="canonical" href="https://hiroghap1.github.io/island-zip/">
+
 <!-- Open Graph -->
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://hiroghap1.github.io/island-zip/">
 <meta property="og:title" content="離島郵便番号CSVダウンロード | futureshopの特定地域別送料設定が簡単に">
 <meta property="og:description" content="全国の離島・指定地域の郵便番号 約1,800件を都道府県・市町村・町名の3階層から選んでCSV出力。futureshop の特定地域別送料設定（shippingV2SpecificArea）にそのままインポートでき、離島送料の設定作業がぐっと簡単になります。">
-<meta property="og:image" content="./ogp.jpg">
+<meta property="og:image" content="https://hiroghap1.github.io/island-zip/ogp.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="離島郵便番号CSVダウンロード">
@@ -24,7 +27,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="離島郵便番号CSVダウンロード | futureshopの特定地域別送料設定が簡単に">
 <meta name="twitter:description" content="全国の離島・指定地域の郵便番号 約1,800件を都道府県・市町村・町名の3階層から選んでCSV出力。futureshop の特定地域別送料設定（shippingV2SpecificArea）にそのままインポートでき、離島送料の設定作業がぐっと簡単になります。">
-<meta name="twitter:image" content="./ogp.jpg">
+<meta name="twitter:image" content="https://hiroghap1.github.io/island-zip/ogp.jpg">
 <meta name="twitter:creator" content="@hiro_ghap1">
 
 <link rel="icon" type="image/svg+xml" href="./favicon.svg">
@@ -403,12 +406,11 @@ function updateCount() {
 function downloadCSV() {
   const codes = allLeaves.filter(cb => cb.checked).map(cb => cb.dataset.code);
   const csv = "郵便番号\r\n" + codes.join("\r\n") + "\r\n";
-  const bom = "﻿";
-  const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8" });
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  const ts = new Date().toISOString().replace(/[:T]/g, "-").slice(0, 16);
+  const ts = new Date().toLocaleString("sv-SE", { timeZone: "Asia/Tokyo" }).replace(/[: ]/g, "-").slice(0, 16);
   a.download = `shippingV2SpecificArea-${ts}.csv`;
   document.body.append(a);
   a.click();
