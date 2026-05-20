@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>離島郵便番号CSVダウンロード | 全国の離島の郵便番号を都道府県別に選んでCSV出力</title>
+<meta name="description" content="北海道から沖縄まで、全国の離島・指定地域の郵便番号（約1,800件）を都道府県・市町村・町名の3階層から選んでチェックし、まとめてCSVファイルでダウンロードできる無料Webツール。futureshop の特定地域別送料設定（shippingV2SpecificArea）にそのままインポートでき、離島送料の設定作業がぐっと簡単になります。">
+<meta name="keywords" content="離島,郵便番号,CSV,ダウンロード,futureshop,フューチャーショップ,特定地域別送料,shippingV2SpecificArea,送料設定,ネットショップ,EC,北海道,沖縄,奄美,小笠原,佐渡">
+<meta name="author" content="Yoshihiro Hasegawa">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="離島郵便番号CSVダウンロード | futureshopの特定地域別送料設定が簡単に">
+<meta property="og:description" content="全国の離島・指定地域の郵便番号 約1,800件を都道府県・市町村・町名の3階層から選んでCSV出力。futureshop の特定地域別送料設定（shippingV2SpecificArea）にそのままインポートでき、離島送料の設定作業がぐっと簡単になります。">
+<meta property="og:image" content="./ogp.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="離島郵便番号CSVダウンロード">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="離島郵便番号CSVダウンロード">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="離島郵便番号CSVダウンロード | futureshopの特定地域別送料設定が簡単に">
+<meta name="twitter:description" content="全国の離島・指定地域の郵便番号 約1,800件を都道府県・市町村・町名の3階層から選んでCSV出力。futureshop の特定地域別送料設定（shippingV2SpecificArea）にそのままインポートでき、離島送料の設定作業がぐっと簡単になります。">
+<meta name="twitter:image" content="./ogp.jpg">
+<meta name="twitter:creator" content="@hiro_ghap1">
+
+<link rel="icon" type="image/svg+xml" href="./favicon.svg">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f7;
+    color: #1d1d1f;
+  }
+  header {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    border-bottom: 1px solid #d2d2d7;
+    padding: 16px 24px;
+    z-index: 10;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  h1 {
+    margin: 0 0 4px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .lead {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: #6e6e73;
+  }
+  .toolbar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .toolbar button {
+    padding: 8px 16px;
+    border: 1px solid #d2d2d7;
+    background: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .toolbar button:hover { background: #f5f5f7; }
+  .toolbar .primary {
+    background: #0071e3;
+    border-color: #0071e3;
+    color: #fff;
+  }
+  .toolbar .primary:hover { background: #0077ed; }
+  .toolbar .primary:disabled {
+    background: #b0b0b5;
+    border-color: #b0b0b5;
+    cursor: not-allowed;
+  }
+  .toolbar input[type="search"] {
+    padding: 8px 12px;
+    border: 1px solid #d2d2d7;
+    border-radius: 8px;
+    font-size: 13px;
+    width: 260px;
+  }
+  .count {
+    font-size: 13px;
+    color: #6e6e73;
+    margin-left: auto;
+  }
+  .count strong { color: #0071e3; }
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 24px 48px;
+  }
+  details.pref {
+    background: #fff;
+    border: 1px solid #d2d2d7;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::marker { display: none; }
+  summary::before {
+    content: "▶";
+    display: inline-block;
+    width: 14px;
+    text-align: center;
+    color: #86868b;
+    font-size: 10px;
+    transition: transform 0.15s;
+    flex-shrink: 0;
+  }
+  details[open] > summary::before {
+    transform: rotate(90deg);
+  }
+  summary:hover { background: #f5f5f7; }
+  summary.lvl-1 {
+    font-weight: 600;
+    font-size: 15px;
+    background: #fafafc;
+  }
+  details[open].pref > summary.lvl-1 {
+    border-bottom: 1px solid #e8e8ed;
+  }
+  summary.lvl-2 {
+    font-weight: 500;
+    font-size: 14px;
+    padding-left: 28px;
+  }
+  details[open].city > summary.lvl-2 {
+    border-bottom: 1px solid #f0f0f3;
+  }
+  details.city {
+    border-bottom: 1px solid #f0f0f3;
+  }
+  details.city:last-child { border-bottom: none; }
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px 8px 70px;
+    font-size: 13px;
+    color: #424245;
+    border-top: 1px solid #f5f5f7;
+  }
+  .item:hover { background: #fafafc; }
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #0071e3;
+    flex-shrink: 0;
+  }
+  .code {
+    margin-left: auto;
+    font-family: "SF Mono", Menlo, monospace;
+    color: #6e6e73;
+    font-size: 12px;
+  }
+  .name { flex: 1; }
+  .name-small {
+    color: #6e6e73;
+    font-size: 11px;
+    font-weight: normal;
+    margin-left: 6px;
+  }
+  .hidden { display: none !important; }
+  .empty-name { color: #b0b0b5; font-style: italic; }
+  footer {
+    text-align: center;
+    padding: 24px 16px 32px;
+    font-size: 12px;
+    color: #6e6e73;
+    border-top: 1px solid #e8e8ed;
+    margin-top: 24px;
+  }
+  footer a {
+    color: #0071e3;
+    text-decoration: none;
+  }
+  footer a:hover { text-decoration: underline; }
+  .error-box {
+    background: #fff;
+    border: 1px solid #ff3b30;
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .error-box pre {
+    background: #f5f5f7;
+    padding: 12px;
+    border-radius: 8px;
+    overflow: auto;
+    margin: 8px 0;
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>離島郵便番号 CSVダウンロード</h1>
+  <p class="lead">都道府県・市町村・町名から選択して CSV 出力。<strong>futureshop の特定地域別送料設定（shippingV2SpecificArea）</strong> がそのままインポートで設定できます。</p>
+  <div class="toolbar">
+    <button id="expandAll">すべて展開</button>
+    <button id="collapseAll">すべて折りたたみ</button>
+    <button id="selectAll">すべて選択</button>
+    <button id="clearAll">選択解除</button>
+    <input type="search" id="search" placeholder="都道府県・市町村・町名・郵便番号で検索">
+    <span class="count">選択中: <strong id="selCount">0</strong> 件</span>
+    <button id="download" class="primary" disabled>CSVダウンロード</button>
+  </div>
+</header>
+<main id="tree"></main>
+<footer>
+  &copy; Yoshihiro Hasegawa &nbsp;X <a href="https://x.com/hiro_ghap1" target="_blank" rel="noopener">@hiro_ghap1</a>
+</footer>
+
+<script>
+const tree = document.getElementById("tree");
+const selCount = document.getElementById("selCount");
+const downloadBtn = document.getElementById("download");
+const searchInput = document.getElementById("search");
+
+let DATA = [];
+let allLeaves = [];
+
+async function loadData() {
+  try {
+    const res = await fetch('./data.json');
+    if (!res.ok) throw new Error('HTTP ' + res.status + ' ' + res.statusText);
+    const json = await res.json();
+    DATA = json.prefectures;
+    buildTree();
+    updateCount();
+  } catch (e) {
+    const dir = window.location.pathname.split('/').slice(0, -1).join('/');
+    tree.innerHTML = `<div class="error-box">
+      <strong style="color:#ff3b30; font-size:15px;">data.json の読み込みに失敗しました</strong>
+      <div style="margin-top:8px; color:#6e6e73; font-size:13px;">${e.message}</div>
+      <hr style="border:none; border-top:1px solid #e8e8ed; margin:16px 0;">
+      <div style="font-size:13px; line-height:1.7;">
+        <code>file://</code> で直接開くとブラウザの制限で JSON を読み込めません。<br>
+        以下のいずれかの方法で開いてください:
+        <ol>
+          <li>ターミナルでローカルサーバを起動<pre>cd "${dir}"
+python3 -m http.server 8000</pre>ブラウザで <a href="http://localhost:8000/" target="_blank">http://localhost:8000/</a> を開く</li>
+          <li>VS Code の Live Server 拡張機能などを利用</li>
+        </ol>
+      </div>
+    </div>`;
+  }
+}
+
+// summary 内の checkbox クリックで details が開閉しないようにする
+// preventDefault を使うと checkbox のトグル/changeイベントごと止まってしまうため、
+// 自然なクリック動作はそのまま許可し、details.open だけ microtask で巻き戻す。
+// microtask はペイント前に実行されるので、見た目のちらつきは発生しない。
+function preventDetailsToggleFromCheckbox(detailsEl, cb) {
+  cb.addEventListener("click", () => {
+    const wasOpen = detailsEl.open;
+    queueMicrotask(() => {
+      if (detailsEl.open !== wasOpen) detailsEl.open = wasOpen;
+    });
+  });
+}
+
+function buildTree() {
+  DATA.forEach((pref) => {
+    const prefDetails = document.createElement("details");
+    prefDetails.className = "pref";
+
+    const prefSummary = document.createElement("summary");
+    prefSummary.className = "lvl-1";
+    const prefCb = document.createElement("input");
+    prefCb.type = "checkbox";
+    prefCb.dataset.level = "pref";
+    const prefLabel = document.createElement("span");
+    prefLabel.className = "name";
+    prefLabel.textContent = pref.name;
+    const prefCountLabel = document.createElement("span");
+    prefCountLabel.className = "name-small";
+    prefSummary.append(prefCb, prefLabel, prefCountLabel);
+    preventDetailsToggleFromCheckbox(prefDetails, prefCb);
+    prefDetails.append(prefSummary);
+
+    let prefLeafCount = 0;
+    pref.cities.forEach((city) => {
+      const cityDetails = document.createElement("details");
+      cityDetails.className = "city";
+
+      const citySummary = document.createElement("summary");
+      citySummary.className = "lvl-2";
+      const cityCb = document.createElement("input");
+      cityCb.type = "checkbox";
+      cityCb.dataset.level = "city";
+      const cityLabel = document.createElement("span");
+      cityLabel.className = "name";
+      cityLabel.textContent = city.name;
+      const cityCount = document.createElement("span");
+      cityCount.className = "name-small";
+      cityCount.textContent = `(${city.items.length}件)`;
+      citySummary.append(cityCb, cityLabel, cityCount);
+      preventDetailsToggleFromCheckbox(cityDetails, cityCb);
+      cityDetails.append(citySummary);
+
+      city.items.forEach((item) => {
+        const itemRow = document.createElement("div");
+        itemRow.className = "item";
+        const itemCb = document.createElement("input");
+        itemCb.type = "checkbox";
+        itemCb.dataset.level = "item";
+        itemCb.dataset.code = item.code;
+        const itemLabel = document.createElement("span");
+        itemLabel.className = "name";
+        if (item.name) {
+          itemLabel.textContent = item.name;
+        } else {
+          itemLabel.innerHTML = '<span class="empty-name">（町名なし）</span>';
+        }
+        const itemCode = document.createElement("span");
+        itemCode.className = "code";
+        itemCode.textContent = item.code;
+        itemRow.append(itemCb, itemLabel, itemCode);
+        cityDetails.append(itemRow);
+        allLeaves.push(itemCb);
+        prefLeafCount++;
+
+        itemRow.addEventListener("click", (e) => {
+          if (e.target === itemCb) return;
+          itemCb.checked = !itemCb.checked;
+          itemCb.dispatchEvent(new Event("change"));
+        });
+        itemCb.addEventListener("change", () => {
+          updateParents(cityCb, cityDetails.querySelectorAll('input[data-level="item"]'));
+          updateParents(prefCb, prefDetails.querySelectorAll('input[data-level="item"]'));
+          updateCount();
+        });
+      });
+
+      cityCb.addEventListener("change", () => {
+        const childCbs = cityDetails.querySelectorAll('input[data-level="item"]');
+        childCbs.forEach(cb => cb.checked = cityCb.checked);
+        cityCb.indeterminate = false;
+        updateParents(prefCb, prefDetails.querySelectorAll('input[data-level="item"]'));
+        updateCount();
+      });
+
+      prefDetails.append(cityDetails);
+    });
+
+    prefCountLabel.textContent = `(${prefLeafCount}件)`;
+
+    prefCb.addEventListener("change", () => {
+      const itemCbs = prefDetails.querySelectorAll('input[data-level="item"]');
+      const cityCbs = prefDetails.querySelectorAll('input[data-level="city"]');
+      itemCbs.forEach(cb => cb.checked = prefCb.checked);
+      cityCbs.forEach(cb => { cb.checked = prefCb.checked; cb.indeterminate = false; });
+      prefCb.indeterminate = false;
+      updateCount();
+    });
+
+    tree.append(prefDetails);
+  });
+}
+
+function updateParents(parentCb, childCbs) {
+  const checked = Array.from(childCbs).filter(cb => cb.checked).length;
+  if (checked === 0) {
+    parentCb.checked = false;
+    parentCb.indeterminate = false;
+  } else if (checked === childCbs.length) {
+    parentCb.checked = true;
+    parentCb.indeterminate = false;
+  } else {
+    parentCb.checked = false;
+    parentCb.indeterminate = true;
+  }
+}
+
+function updateCount() {
+  const n = allLeaves.filter(cb => cb.checked).length;
+  selCount.textContent = n.toLocaleString();
+  downloadBtn.disabled = n === 0;
+}
+
+function downloadCSV() {
+  const codes = allLeaves.filter(cb => cb.checked).map(cb => cb.dataset.code);
+  const csv = "郵便番号\r\n" + codes.join("\r\n") + "\r\n";
+  const bom = "﻿";
+  const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  const ts = new Date().toISOString().replace(/[:T]/g, "-").slice(0, 16);
+  a.download = `shippingV2SpecificArea-${ts}.csv`;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById("expandAll").addEventListener("click", () => {
+  tree.querySelectorAll("details").forEach(d => d.open = true);
+});
+document.getElementById("collapseAll").addEventListener("click", () => {
+  tree.querySelectorAll("details").forEach(d => d.open = false);
+});
+document.getElementById("selectAll").addEventListener("click", () => {
+  allLeaves.forEach(cb => cb.checked = true);
+  tree.querySelectorAll('input[data-level="city"], input[data-level="pref"]').forEach(cb => {
+    cb.checked = true;
+    cb.indeterminate = false;
+  });
+  updateCount();
+});
+document.getElementById("clearAll").addEventListener("click", () => {
+  allLeaves.forEach(cb => cb.checked = false);
+  tree.querySelectorAll('input[data-level="city"], input[data-level="pref"]').forEach(cb => {
+    cb.checked = false;
+    cb.indeterminate = false;
+  });
+  updateCount();
+});
+downloadBtn.addEventListener("click", downloadCSV);
+
+searchInput.addEventListener("input", () => {
+  const q = searchInput.value.trim().toLowerCase();
+  if (!q) {
+    tree.querySelectorAll("details, .item").forEach(el => el.classList.remove("hidden"));
+    tree.querySelectorAll("details").forEach(d => d.open = false);
+    return;
+  }
+  tree.querySelectorAll("details.pref").forEach(prefDetails => {
+    let prefMatch = false;
+    const prefName = prefDetails.querySelector("summary.lvl-1 .name").textContent.toLowerCase();
+    prefDetails.querySelectorAll("details.city").forEach(cityDetails => {
+      let cityMatch = false;
+      const cityName = cityDetails.querySelector("summary.lvl-2 .name").textContent.toLowerCase();
+      cityDetails.querySelectorAll(".item").forEach(itemRow => {
+        const townName = itemRow.querySelector(".name").textContent.toLowerCase();
+        const code = itemRow.querySelector(".code").textContent.toLowerCase();
+        const hit = prefName.includes(q) || cityName.includes(q) || townName.includes(q) || code.includes(q);
+        itemRow.classList.toggle("hidden", !hit);
+        if (hit) cityMatch = true;
+      });
+      cityDetails.classList.toggle("hidden", !cityMatch);
+      cityDetails.open = cityMatch;
+      if (cityMatch) prefMatch = true;
+    });
+    prefDetails.classList.toggle("hidden", !prefMatch);
+    prefDetails.open = prefMatch;
+  });
+});
+
+loadData();
+</script>
+</body>
+</html>

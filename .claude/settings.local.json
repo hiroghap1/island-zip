@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(open *)",
+      "Bash(node -e ' *)",
+      "Bash(awk 'NR==158,NR==337' index.html)",
+      "Read(//tmp/**)",
+      "Bash(python3 -m http.server 8765)",
+      "Bash(curl -s http://localhost:8765/data.json)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} size=%{size_download}\\\\n\" http://localhost:8765/index.html)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} size=%{size_download}\\\\n\" http://localhost:8765/data.json)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:8765/index.html)",
+      "Bash(curl -s -o /dev/null -w \"favicon.svg: HTTP %{http_code}\\\\n\" http://localhost:8765/favicon.svg)",
+      "Bash(ls -la *.jpg *.png)",
+      "Bash(file ogp.jpg)",
+      "Bash(curl -s -o /dev/null -w \"ogp.jpg HTTP %{http_code}\\\\n\" http://localhost:8765/ogp.jpg)"
+    ]
+  }
+}
