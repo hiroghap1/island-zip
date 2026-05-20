@@ -14,7 +14,13 @@
       "Bash(ls -la *.jpg *.png)",
       "Bash(file ogp.jpg)",
       "Bash(curl -s -o /dev/null -w \"ogp.jpg HTTP %{http_code}\\\\n\" http://localhost:8765/ogp.jpg)",
-      "Bash(xxd)"
+      "Bash(xxd)",
+      "WebSearch",
+      "WebFetch(domain:www.totebag.jp)",
+      "WebFetch(domain:manual.future-shop.jp)",
+      "WebFetch(domain:www.hozan.co.jp)",
+      "WebFetch(domain:zip.kuronekoyamato.co.jp)",
+      "WebFetch(domain:www.post.japanpost.jp)"
     ]
   }
 }
