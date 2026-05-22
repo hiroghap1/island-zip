@@ -20,7 +20,21 @@
       "WebFetch(domain:manual.future-shop.jp)",
       "WebFetch(domain:www.hozan.co.jp)",
       "WebFetch(domain:zip.kuronekoyamato.co.jp)",
-      "WebFetch(domain:www.post.japanpost.jp)"
+      "WebFetch(domain:www.post.japanpost.jp)",
+      "Bash(python3 -c ' *)",
+      "Read(//private/tmp/**)",
+      "Bash(curl -s -o ken_all.zip \"https://www.post.japanpost.jp/zipcode/dl/kogaki/zip/ken_all.zip\")",
+      "Bash(unzip -o ken_all.zip)",
+      "Bash(curl -sL -o ken_all.zip \"https://www.post.japanpost.jp/zipcode/kogaki/zip/ken_all.zip\")",
+      "Bash(curl -sL -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/120.0.0.0 Safari/537.36\" -o ken_all.zip \"https://www.post.japanpost.jp/zipcode/dl/kogaki/zip/ken_all.zip\")",
+      "Bash(curl -sL -o utf_all.zip \"https://www.post.japanpost.jp/zipcode/dl/utf/zip/utf_ken_all.zip\")",
+      "Bash(curl -I -sL \"https://www.post.japanpost.jp/zipcode/dl/kogaki/zip/ken_all.zip\")",
+      "Bash(curl -sL -A \"Mozilla/5.0 \\(Macintosh; Intel Mac OS X 10_15_7\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/120.0.0.0 Safari/537.36\" -e \"https://www.post.japanpost.jp/zipcode/dl/kogaki-zip.html\" -o ken_all.zip \"https://www.post.japanpost.jp/zipcode/dl/kogaki/zip/ken_all.zip\" -w \"HTTP %{http_code} Size %{size_download}\\\\n\")",
+      "Bash(curl -sL \"https://www.post.japanpost.jp/zipcode/dl/kogaki-zip.html\")",
+      "Bash(curl -sLI \"https://www.post.japanpost.jp/zipcode/dl/kogaki-zip.html\")",
+      "Bash(curl -sL -o ken_all.zip \"https://www.post.japanpost.jp/service/search/zipcode/download/kogaki/zip/ken_all.zip\")",
+      "Bash(iconv -f SHIFT_JIS -t UTF-8)",
+      "Bash(python3)"
     ]
   }
 }
